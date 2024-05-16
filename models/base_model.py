@@ -7,11 +7,20 @@ all common attributes/methods for other classes
 """
 
 class BaseModel():
-    def __init__(self):
-        " creating public instance variables"
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = None
+    def __init__(self, *args, **kwargs):
+        "Taking attributes from an already existing dictionary"
+        if kwargs :
+            for key, value in kwargs.items():
+                if key != '__class__':
+                    setattr(self, key, value)
+            self.created_at = datetime.strptime(self.created_at, "%Y-%m-%d %H:%M:%S")
+            self.updated_at = datetime.strptime(self.updated_at, "%Y-%m-%d %H:%M:%S")
+        else:
+            "Creating public instance attributes"
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = None
+
 
     def __str__(self):
         "Class name of the instance"
