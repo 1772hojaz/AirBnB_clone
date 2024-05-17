@@ -8,18 +8,19 @@ all common attributes/methods for other classes
 
 class BaseModel():
     def __init__(self, *args, **kwargs):
-        "Taking attributes from an already existing dictionary"
-        if kwargs :
-            for key, value in kwargs.items():
-                if key != '__class__':
-                    setattr(self, key, value)
-            self.created_at = datetime.strptime(self.created_at, "%Y-%m-%d %H:%M:%S")
-            self.updated_at = datetime.strptime(self.updated_at, "%Y-%m-%d %H:%M:%S")
-        else:
-            "Creating public instance attributes"
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = None
+        "Creating public instance attributes"
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = None
+        t = '%Y-%m-%dT%H:%M:%S.%f'
+
+        if len(kwargs) != 0:
+            for k, v in kwargs.items():
+                if k == "created_at" or k == "updated_at":
+                    if v is not None:
+                        self.__dict__[k] = datetime.strptime(v,t)
+                    else:
+                        self.__dict__[k] = v
 
 
     def __str__(self):
