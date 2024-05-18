@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import uuid
 from datetime  import datetime
+from models import storage
+import models
 """
 A base model that defines
 all common attributes/methods for other classes
@@ -21,6 +23,8 @@ class BaseModel():
                         self.__dict__[k] = datetime.strptime(v,t)
                     else:
                         self.__dict__[k] = v
+        else:
+            models.storage.new(self)
 
 
     def __str__(self):
@@ -30,7 +34,7 @@ class BaseModel():
     def save(self):
         "Gives the time of update"
         self.updated_at = datetime.now()
-        return self.updated_at
+        models.storage.save()
 
     def to_dict(self):
         "Output a  serialized dictionary representation of an instance"
